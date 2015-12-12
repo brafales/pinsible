@@ -1,0 +1,8 @@
+---
+# This Playbook would deploy the whole mongodb cluster with replication and sharding.
+
+- hosts: all
+  remote_user: pi
+  sudo: yes
+  roles:
+    - nginx

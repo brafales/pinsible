@@ -1,0 +1,26 @@
+---
+- name: Install openvpn
+  apt: name={{ item }} state=present
+  with_items:
+    - openvpn
+    - resolvconf
+  sudo: True
+
+- name: Copy pia configuration for openvpn
+  template: src=pia.conf dest={{ openvpn_etc_folder }}/pia.conf owner=root mode='0444'
+  sudo: True
+
+- name: Copy pia credentials file for openvpn
+  template: src=pia_credentials.data.j2 dest={{ openvpn_etc_folder }}/login.conf owner=root mode='0444'
+  sudo: True
+
+- name: Copy pia certificate information for openvpn
+  template: src={{ item }} dest={{ openvpn_etc_folder }}/{{ item }} owner=root mode='0444'
+  with_items:
+    - 'ca.crt'
+    - 'crl.pem'
+  sudo: True
+
+- name: Make pia the default vpn to connect to on startup
+  template: src=openvpn.conf dest=/etc/default/openvpn owner=root mode='0644'
+  sudo: True

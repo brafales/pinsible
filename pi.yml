@@ -10,3 +10,4 @@
   roles:
     - nginx
     - { role: rvm_io.rvm1-ruby, sudo: True }
+    - pia

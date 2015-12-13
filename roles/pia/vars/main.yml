@@ -1,0 +1,4 @@
+---
+pia_username: 'your pia username'
+pia_password: 'your pia password'
+openvpn_etc_folder: '/etc/openvpn'

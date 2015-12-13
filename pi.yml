@@ -2,7 +2,11 @@
 # This Playbook would deploy the whole mongodb cluster with replication and sharding.
 
 - hosts: all
+  vars:
+    rvm1_rubies:
+            - 'ruby-2.2.3'
+    rvm1_rvm_check_for_updates: False
   remote_user: pi
-  sudo: yes
   roles:
     - nginx
+    - { role: rvm_io.rvm1-ruby, sudo: True }

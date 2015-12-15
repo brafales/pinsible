@@ -1,0 +1,24 @@
+---
+  - name: Install ferm and dependencies
+    apt: name={{ item }} state=present
+    with_items:
+      - ferm
+      - ulogd2
+      - ulogd2-pcap
+    sudo: True
+
+  - name: Copy ferm config file
+    template: src=ferm.conf.j2 dest=/etc/ferm/ferm.conf owner=root mode='0644'
+    sudo: True
+
+  - name: Copy ferm defaults file
+    template: src=default_ferm dest=/etc/default/ferm owner=root mode='0644'
+    sudo: True
+
+  - name: Copy ferm udev rules file
+    template: src=81-vpn-firewall.rules dest=/etc/udev/rules.d/81-vpn-firewall.rules owner=root mode='0644'
+    sudo: True
+
+  - name: Copy ferm reload script
+    template: src=fermreload.sh dest=/usr/local/bin/fermreload.sh owner=root mode='0555'
+    sudo: True

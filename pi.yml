@@ -6,8 +6,11 @@
     rvm1_rubies:
             - 'ruby-2.2.3'
     rvm1_rvm_check_for_updates: False
+    transmission_initial_port: '16384'
+    whitelisted_last_port: '16383'
   remote_user: pi
   roles:
     - nginx
     - { role: rvm_io.rvm1-ruby, sudo: True }
     - pia
+    - ferm

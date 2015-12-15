@@ -1,0 +1,144 @@
+# -*- shell-script -*-
+#
+#  Configuration file for ferm(1).
+#
+#  V: 0.1
+#
+#  ferm manual: http://ferm.foo-projects.org/download/2.2/ferm.html
+#  Blog post:   https://blog.ipredator.se/howto/restricting-transmission-to-the-vpn-interface-on-ubuntu-linux.html
+
+# Really make sure that these modules exist and are loaded.
+@hook pre "/sbin/modprobe nf_conntrack_ftp";
+@hook pre "/sbin/modprobe nfnetlink_log";
+
+# Network interfaces.
+@def $DEV_LAN = eth0;
+@def $DEV_LOOPBACK = lo0;
+@def $DEV_VPN = tun0;
+
+# Network definition for the loopback device. This is needed to allow
+# DNS resolution on Ubuntu Linux where the local resolver is bound
+# to 127.0.1.1 - as opposed to the default 127.0.0.1.
+@def $NET_LOOPBACK = 127.0.0.0/8;
+
+# Ports Transmission is allowed to use.
+@def $PORT_TRANSMISSION = {{ transmission_initial_port }}:65535;
+@def $PORT_EVERYTHING_ELSE = 0:{{ whitelisted_last_port }};
+
+# Make sure to use the proper VPN interface (e.g. tun0 in this case).
+# Note: You cannot reference $DEV_VPN here, substition does not take
+#       place for commands passed to a sub shell.
+@def $VPN_ACTIVE = `ip link show tun0 >/dev/null 2>/dev/null && echo 1 || echo`;
+
+# VPN interface conditional. If true the following rules are loaded.
+@if $VPN_ACTIVE {
+    domain ip {
+        table filter{
+            chain INPUT {
+                interface $DEV_VPN {
+                    proto (tcp udp) dport $PORT_TRANSMISSION ACCEPT;
+                }
+            }
+            chain OUTPUT {
+                # Default allowed outbound services on the VPN interface.
+                # If you need more simply add your rules here.
+                outerface $DEV_VPN {
+                    proto (tcp udp) dport $PORT_TRANSMISSION ACCEPT;
+                }
+            }
+        }
+    }
+}
+
+# The main IPv4 rule set.
+domain ip {
+    table filter {
+        chain INPUT {
+            # The default policy for the chain. Usually ACCEPT or DROP or REJECT.
+            policy DROP;
+
+            # Connection tracking.
+            mod state state INVALID DROP;
+            mod state state (ESTABLISHED RELATED) ACCEPT;
+
+            # Allow local traffic to loopback interface.
+            daddr $NET_LOOPBACK ACCEPT;
+
+            # Allow traffic for all non transmission ports.
+            interface $DEV_LAN {
+                proto (tcp udp) dport $PORT_EVERYTHING_ELSE ACCEPT;
+            }
+
+            # Respond to ping ... makes debugging easier.
+            proto icmp icmp-type echo-request ACCEPT;
+
+            # Log dropped packets.
+            NFLOG nflog-group 1;
+            DROP;
+        }
+
+        chain OUTPUT {
+            policy DROP;
+
+            # Connection tracking.
+            mod state state INVALID DROP;
+            mod state state (ESTABLISHED RELATED) ACCEPT;
+
+            # Allow local traffic from the loopback interface.
+            saddr $NET_LOOPBACK ACCEPT;
+
+            # Respond to ping.
+            proto icmp icmp-type echo-request ACCEPT;
+
+            # Allow traffic for all non transmission ports.
+            outerface $DEV_LAN {
+                proto (tcp udp) dport $PORT_EVERYTHING_ELSE ACCEPT;
+            }
+
+            # Log dropped packets.
+            NFLOG nflog-group 1;
+            DROP;
+        }
+
+        chain FORWARD {
+            policy DROP;
+
+            # If you use your machine to route traffic eg.
+            # from a VM you have to add rules here!
+
+            # Log dropped packets.
+            NFLOG nflog-group 1;
+            DROP;
+        }
+    }
+}
+
+# IPv6 is generally disabled, communication on the loopback device is allowed.
+domain ip6 {
+    table filter {
+        chain INPUT {
+            policy DROP;
+
+            # Allow local traffic.
+            interface $DEV_LOOPBACK ACCEPT;
+
+            # Log dropped packets.
+            NFLOG nflog-group 1;
+            DROP;
+        }
+        chain OUTPUT {
+            policy DROP;
+
+            # Log dropped packets.
+            NFLOG nflog-group 1;
+            DROP;
+        }
+        chain FORWARD {
+            policy DROP;
+
+            # Log dropped packets.
+            NFLOG nflog-group 1;
+            DROP;
+        }
+    }
+}

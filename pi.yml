@@ -10,6 +10,7 @@
     whitelisted_last_port: '16383'
   remote_user: pi
   roles:
+    - common
     - nginx
     - { role: rvm_io.rvm1-ruby, sudo: True }
     - pia

@@ -7,6 +7,10 @@
     transmission_peer_port: '51413'
     transmission_initial_port: '49152'
     transmission_final_port: '65535'
+    transmission_rpc_password: 'password'
+    transmission_rpc_username: 'transmission'
+    transmission_complete_folder: '/var/lib/transmission-daemon/complete'
+    series_folder: 'Series'
   remote_user: pi
   roles:
     - common
@@ -14,3 +18,4 @@
     - { role: rvm_io.rvm1-ruby, sudo: True }
     - pia
     - transmission
+    - flexget

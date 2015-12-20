@@ -1,0 +1,84 @@
+---
+templates:
+  torrent:
+    transmission:
+      host: {{ transmission_rpc_host }}
+      port: {{ transmission_rpc_port }}
+      ratio: {{ min_ratio }}
+      username: {{ transmission_rpc_username }}
+      password: {{ transmission_rpc_password }}
+  tv:
+    template: torrent
+    metainfo_series: yes
+    quality: 720p h264
+    discover:
+      what:
+        - emit_series:
+            from_start: yes
+      from:
+        - kat:
+            category: tv
+            verified: yes
+        - rarbg:
+            category:
+              - x264 720p
+    regexp:
+      reject:
+        - WEB
+        - WEB-DL
+    exists_series:
+      - /var/lib/transmission-daemon/complete/Series
+    series:
+      - The Big Bang Theory:
+          identified_by: ep
+          begin: S09E12
+      - Family Guy:
+          identified_by: ep
+          begin: S14E10
+    set:
+      path: {{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}
+      main_file_only: yes
+      content_filename: "{{ "{{ series_name }}" }} - {{ "{{ series_id }}" }}"
+      include_subs: yes
+
+  anime:
+    template: torrent
+    metainfo_series: yes
+    quality: 720p
+    discover:
+      what:
+        - emit_series:
+            from_start: yes
+      from:
+        - nyaa:
+            category: anime eng
+            filter: trusted only
+    exists_series:
+      - /var/lib/transmission-daemon/complete/Series
+    series:
+      - One Punch Man:
+          identified_by: sequence
+          begin: 12
+      - Naruto Shippuuden:
+          identified_by: sequence
+          begin: 442
+    set:
+      path: {{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}
+      main_file_only: yes
+      content_filename: "{{ "{{ series_name }}" }} - {{ "{{ series_id }}" }}"
+
+tasks:
+  update_series:
+    template: tv
+
+  update_animes:
+    template: anime
+
+  remove_old_torrents:
+    clean_transmission:
+      finished_for: 7 days
+      min_ratio: {{ min_ratio }}
+      host: {{ transmission_rpc_host }}
+      port: {{ transmission_rpc_port }}
+      username: {{ transmission_rpc_username }}
+      password: {{ transmission_rpc_password }}

@@ -1,0 +1,30 @@
+---
+- name: Install dependencies
+  apt: name={{ item }} state=present
+  with_items:
+    - python
+    - python-pip
+  sudo: True
+
+- name: Install flexget pip dependencies
+  pip: name=six version=1.9.0
+  sudo: True
+
+- name: Install flexget
+  pip: name=flexget
+  sudo: True
+
+- name: Install transmissionrpc
+  pip: name=transmissionrpc
+  sudo: True
+
+- name: Create flexget config folder
+  file: path=/home/pi/.flexget state=directory owner=pi group=pi mode='u=rwx,g=rx'
+  sudo: True
+
+- name: Copy flexget configuration
+  template: src=config.yml.j2 dest=/home/pi/.flexget/config.yml owner=pi group=pi mode='u=rw,g=rw'
+  sudo: True
+
+- name: Add flexget to the crontab
+  cron: name="run flexget" special_time=hourly job="/usr/local/bin/flexget --cron execute" state=present

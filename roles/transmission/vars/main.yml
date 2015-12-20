@@ -1,6 +1,3 @@
 ---
 incomplete_folder: '/var/lib/transmission-daemon/downloads'
-complete_folder: '/var/lib/transmission-daemon/complete'
-rpc_password: 'password'
-rpc_username: 'transmission'
 configuration_path: '/var/lib/transmission-daemon/.config/transmission-daemon/settings.json'

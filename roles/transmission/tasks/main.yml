@@ -1,0 +1,34 @@
+---
+- name: Install transmission packages
+  apt: name={{ item }} state=present
+  with_items:
+    - transmission-daemon
+    - transmission-cli
+  sudo: True
+
+- name: Start service to create folder structure
+  service: name=transmission-daemon state=started
+  sudo: True
+
+- name: Stop service to make sure we can change settings safely
+  service: name=transmission-daemon state=stopped
+  sudo: True
+
+- name: Create download folders
+  file: path={{ item }} owner=debian-transmission group=debian-transmission state=directory mode='u=rwx,g=rwx'
+  with_items:
+    - "{{ incomplete_folder }}"
+    - "{{ complete_folder }}"
+  sudo: True
+
+- name: Copy transmission configuration file
+  template: src=settings.json.j2 dest={{ configuration_path }} owner=debian-transmission group=debian-transmission mode='u=rw,g=rw'
+  sudo: True
+
+- name: Copy transmission udev rules file
+  template: src=81-vpn-firewall.rules dest=/etc/udev/rules.d/81-vpn-firewall.rules owner=root mode='0644'
+  sudo: True
+
+- name: Copy transmission config reload script
+  template: src=change_transmission_bind_address.sh dest=/usr/local/bin/change_transmission_bind_address.sh owner=root mode='0655'
+  sudo: True

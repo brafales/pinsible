@@ -1,0 +1,1 @@
+KERNEL=="tun0", ACTION=="add", RUN+="/usr/local/bin/change_transmission_bind_address.sh add"

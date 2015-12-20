@@ -36,17 +36,13 @@ templates:
       include_subs: yes
 
   anime:
+    regexp:
+      reject_excluding:
+        - HorribleSubs
     template: torrent
     metainfo_series: yes
     quality: 720p
-    discover:
-      what:
-        - emit_series:
-            from_start: yes
-      from:
-        - nyaa:
-            category: anime eng
-            filter: trusted only
+    rss: http://www.nyaa.se/?page=rss&cats=1_37
     exists_series:
       - /var/lib/transmission-daemon/complete/Series
     include: animes.yml

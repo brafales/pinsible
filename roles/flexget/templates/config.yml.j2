@@ -28,13 +28,7 @@ templates:
         - WEB-DL
     exists_series:
       - /var/lib/transmission-daemon/complete/Series
-    series:
-      - The Big Bang Theory:
-          identified_by: ep
-          begin: S09E12
-      - Family Guy:
-          identified_by: ep
-          begin: S14E10
+    include: series.yml
     set:
       path: {{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}
       main_file_only: yes
@@ -55,13 +49,7 @@ templates:
             filter: trusted only
     exists_series:
       - /var/lib/transmission-daemon/complete/Series
-    series:
-      - One Punch Man:
-          identified_by: sequence
-          begin: 12
-      - Naruto Shippuuden:
-          identified_by: sequence
-          begin: 442
+    include: animes.yml
     set:
       path: {{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}
       main_file_only: yes

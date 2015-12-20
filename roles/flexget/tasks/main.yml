@@ -23,7 +23,11 @@
   sudo: True
 
 - name: Copy flexget configuration
-  template: src=config.yml.j2 dest=/home/pi/.flexget/config.yml owner=pi group=pi mode='u=rw,g=rw'
+  template: src={{ item }}.j2 dest=/home/pi/.flexget/{{ item }} owner=pi group=pi mode='u=rw,g=rw'
+  with_items:
+    - config.yml
+    - series.yml
+    - animes.yml
   sudo: True
 
 - name: Add flexget to the crontab

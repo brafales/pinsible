@@ -24,3 +24,6 @@
 - name: Make pia the default vpn to connect to on startup
   template: src=openvpn.conf dest=/etc/default/openvpn owner=root mode='0644'
   sudo: True
+
+- name: Copy pia open port script
+  template: src=check_pia_open_port.sh.j2 dest=/home/pi/bin/check_pia_open_port.sh mode='u+rwx'

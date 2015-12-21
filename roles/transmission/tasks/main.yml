@@ -34,5 +34,11 @@
   sudo: True
 
 - name: Copy transmission config reload script
-  template: src=change_transmission_bind_address.sh dest=/usr/local/bin/change_transmission_bind_address.sh owner=root mode='0655'
+  template: src=change_transmission_bind_address.sh.j2 dest=/usr/local/bin/change_transmission_bind_address.sh owner=root mode='0655'
   sudo: True
+
+- name: Copy transmission port update script
+  template: src=update_transmission_peer_port.py.j2 dest=/home/pi/bin/update_transmission_peer_port.py mode='u+rwx'
+
+- name: Add script to update port to crontab
+  cron: name="run update_transmission_peer_port" special_time=hourly job="/home/pi/bin/check_pia_open_port.sh | xargs /home/pi/bin/update_transmission_peer_port.py" state=present

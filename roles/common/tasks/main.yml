@@ -4,4 +4,8 @@
   with_items:
     - vim
     - ntfs-3g
+    - curl
   sudo: True
+
+- name: Create bin folder for pi user
+  file: path=/home/pi/bin state=directory

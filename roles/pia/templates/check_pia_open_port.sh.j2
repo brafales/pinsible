@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#Checks PIA for an open port
+#More info: https://www.privateinternetaccess.com/forum/discussion/180/port-forwarding-without-the-application-advanced-users
+
+CLIENT_ID='{{ client_id }}'
+USERNAME='{{ pia_username }}'
+PASSWORD='{{ pia_password }}'
+VPN_IP=`ifconfig tun0  | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+PIA_URL='https://www.privateinternetaccess.com/vpninfo/port_forward_assignment'
+
+echo `curl -s -d "user=$USERNAME&pass=$PASSWORD&client_id=$CLIENT_ID&local_ip=$VPN_IP" $PIA_URL | sed 's/[^0-9]*//g'`

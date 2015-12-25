@@ -50,7 +50,7 @@
     "rpc-port": 9091,
     "rpc-url": "/transmission/",
     "rpc-username": "{{ transmission_rpc_username }}",
-    "rpc-whitelist": "127.0.0.1,192.168.0.*",
+    "rpc-whitelist": "127.0.0.1,{{ network_mask }}",
     "rpc-whitelist-enabled": true,
     "scrape-paused-torrents-enabled": true,
     "script-torrent-done-enabled": false,

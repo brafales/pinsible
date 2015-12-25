@@ -1,11 +1,19 @@
 ---
+- name: Update apt cache if older than a day
+  apt: update_cache=yes cache_valid_time=86400
+  sudo: True
+
 - name: Install common packages
   apt: name={{ item }} state=present
   with_items:
     - vim
     - ntfs-3g
     - curl
+    - cron
   sudo: True
 
 - name: Create bin folder for pi user
   file: path=/home/pi/bin state=directory
+
+- name: Copy profile for pi user
+  template: src=bash_profile dest=/home/pi/.bash_profile

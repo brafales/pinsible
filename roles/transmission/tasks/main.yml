@@ -42,3 +42,7 @@
 
 - name: Add script to update port to crontab
   cron: name="run update_transmission_peer_port" special_time=hourly job="/home/pi/bin/check_pia_open_port.sh | xargs /home/pi/bin/update_transmission_peer_port.py" state=present
+
+- name: Disable transmission-daemon on boot
+  service: name=transmission-daemon enabled=false
+  sudo: True

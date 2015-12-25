@@ -1,0 +1,9 @@
+if [ -f ~/.bashrc ]; then
+. ~/.bashrc
+fi
+
+PATH=$HOME/bin:$PATH
+EDITOR=vim
+
+export PATH
+export EDITOR

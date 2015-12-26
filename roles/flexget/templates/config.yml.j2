@@ -11,21 +11,6 @@ templates:
     template: torrent
     metainfo_series: yes
     quality: 720p h264
-    discover:
-      what:
-        - emit_series:
-            from_start: yes
-      from:
-        - kat:
-            category: tv
-            verified: yes
-        - rarbg:
-            category:
-              - x264 720p
-    regexp:
-      reject:
-        - WEB
-        - WEB-DL
     exists_series:
       - /var/lib/transmission-daemon/complete/Series
     include: series.yml
@@ -54,6 +39,8 @@ templates:
 tasks:
   update_series:
     template: tv
+    rss: https://kat.cr/tv/?rss=1
+    priority: 10
 
   update_animes:
     template: anime

@@ -17,3 +17,7 @@
 
 - name: Copy profile for pi user
   template: src=bash_profile dest=/home/pi/.bash_profile
+
+- name: Enable cron
+  service: name=cron enabled=true
+  sudo: True

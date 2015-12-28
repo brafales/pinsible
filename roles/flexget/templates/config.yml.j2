@@ -12,12 +12,11 @@ templates:
     metainfo_series: yes
     quality: 720p h264
     exists_series:
-      - /var/lib/transmission-daemon/complete/Series
+      - "{{ transmission_complete_folder }}/{{ series_folder }}"
     include: series.yml
     set:
-      path: {{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}
+      path: "{{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}"
       main_file_only: yes
-      content_filename: "{{ "{{ series_name }}" }} - {{ "{{ series_id }}" }}"
       include_subs: yes
 
   anime:
@@ -29,7 +28,7 @@ templates:
     quality: 720p
     rss: http://www.nyaa.se/?page=rss&cats=1_37
     exists_series:
-      - /var/lib/transmission-daemon/complete/Series
+      - "{{ transmission_complete_folder }}/{{ series_folder }}"
     include: animes.yml
     set:
       path: {{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}
@@ -40,7 +39,6 @@ tasks:
   update_series:
     template: tv
     rss: https://kat.cr/tv/?rss=1
-    priority: 10
 
   update_animes:
     template: anime
@@ -53,3 +51,20 @@ tasks:
       port: {{ transmission_rpc_port }}
       username: {{ transmission_rpc_username }}
       password: {{ transmission_rpc_password }}
+
+  download_subtitles:
+    interval: 5 hours
+    filesystem:
+      path:
+        - "{{ transmission_complete_folder }}/{{ series_folder }}"
+      regexp: '.*\.(avi|mkv|mp4)$'
+      recursive: yes
+    accept_all: yes
+    disable: seen
+    subliminal:
+      languages:
+        - en
+      exact_match: yes
+      providers:
+        - opensubtitles
+        - podnapisi

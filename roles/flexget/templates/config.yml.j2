@@ -18,6 +18,9 @@ templates:
       path: "{{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}"
       main_file_only: yes
       include_subs: yes
+    prowl:
+      apikey: "{{ prowl_api_key }}"
+      event: "Downloading {{ "{{ series_name }}" }}-{{ "{{ series_id }}" }}"
 
   anime:
     regexp:
@@ -34,6 +37,9 @@ templates:
       path: {{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}
       main_file_only: yes
       content_filename: "{{ "{{ series_name }}" }} - {{ "{{ series_id }}" }}"
+    prowl:
+      apikey: "{{ prowl_api_key }}"
+      event: "Downloading {{ "{{ series_name }}" }}-{{ "{{ series_id }}" }}"
 
 tasks:
   update_series:

@@ -1,0 +1,2 @@
+gpu_mem=160
+hdmi_drive=2

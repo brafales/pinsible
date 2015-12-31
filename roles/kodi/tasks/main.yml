@@ -1,13 +1,13 @@
 ---
 - name: Create kodi folder
-  file: path=/home/pi/kodi state=directory
+  file: path={{ user_home }}/kodi state=directory
 
 - name: Detect kodi source folder
-  stat: path=/home/pi/kodi/kodi-15
+  stat: path={{ user_home }}/kodi/kodi-15
   register: kodi_src
 
 - name: Unarchive kodi source
-  unarchive: src=kodi-15.1-wheezy.tar.gz dest=/home/pi/kodi/
+  unarchive: src=kodi-15.1-wheezy.tar.gz dest={{ user_home }}/kodi/
   when: not kodi_src.stat.exists
 
 - name: Create input group
@@ -17,8 +17,8 @@
 - name: Create udev rules
   template: src=99-input.rules dest=/etc/udev/rules.d/99-input.rules owner=root group=root
   with_items:
-    - "99-input.rules"
-    - "10-permissions.rules"
+    - '99-input.rules'
+    - '10-permissions.rules'
   sudo: True
 
 - name: Add pi to all groups it needs
@@ -26,7 +26,7 @@
   sudo: True
 
 - name: Copy boot config file
-  template: src=boot_config.txt dest=/boot/config.txt owner=root group=root mode="u=rw,g=rw,o=rw"
+  template: src=boot_config.txt dest=/boot/config.txt owner=root group=root mode='u=rw,g=rw,o=rw'
   sudo: True
 
 
@@ -34,7 +34,7 @@
   apt: name=gdebi-core state=present
 
 - name: Uninstall too new packages
-  apt: name="{{ item }}" state=absent
+  apt: name='{{ item }}' state=absent
   with_items:
     - cec-utils
     - libcec1
@@ -44,17 +44,17 @@
   sudo: True
 
 - name: Install libplatform1
-  apt: deb=/home/pi/kodi/kodi-15/libplatform1_1.0.9-1_armhf.deb state=present
+  apt: deb={{ user_home }}/kodi/kodi-15/libplatform1_1.0.9-1_armhf.deb state=present
   sudo: True
 
 - name: Install libcec3
-  apt: deb=/home/pi/kodi/kodi-15/libcec3_3.0.1-1_armhf.deb state=present
+  apt: deb={{ user_home }}/kodi/kodi-15/libcec3_3.0.1-1_armhf.deb state=present
   sudo: True
 
 - name: Install kodi
-  apt: deb=/home/pi/kodi/kodi-15/kodi_15.1-150901-3_armhf.deb state=present
+  apt: deb={{ user_home }}/kodi/kodi-15/kodi_15.1-150901-3_armhf.deb state=present
   sudo: True
 
 - name: Copy startkodi to /usr/local/bin
-  copy: src=startkodi dest=/usr/local/bin/startkodi owner=root group=root mode="u=rwx,g=rx,o=rx"
+  copy: src=startkodi dest=/usr/local/bin/startkodi owner=root group=root mode='u=rwx,g=rx,o=rx'
   sudo: True

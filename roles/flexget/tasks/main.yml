@@ -22,16 +22,14 @@
   sudo: True
 
 - name: Create flexget config folder
-  file: path=/home/pi/.flexget state=directory owner=pi group=pi mode='u=rwx,g=rx'
-  sudo: True
+  file: path={{ user_home }}/.flexget state=directory mode='u=rwx,g=rx'
 
 - name: Copy flexget configuration
-  template: src={{ item }}.j2 dest=/home/pi/.flexget/{{ item }} owner=pi group=pi mode='u=rw,g=rw'
+  template: src={{ item }}.j2 dest={{ user_home }}/.flexget/{{ item }} mode='u=rw,g=rw'
   with_items:
     - config.yml
     - series.yml
     - animes.yml
-  sudo: True
 
 - name: Add flexget to the crontab
-  cron: name="run flexget" special_time=hourly job="/usr/local/bin/flexget --cron execute" state=present
+  cron: name='run flexget' special_time=hourly job='/usr/local/bin/flexget --cron execute' state=present

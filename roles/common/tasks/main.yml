@@ -13,10 +13,10 @@
   sudo: True
 
 - name: Create bin folder for pi user
-  file: path=/home/pi/bin state=directory
+  file: path={{ user_home }}/bin state=directory
 
 - name: Copy profile for pi user
-  template: src=bash_profile dest=/home/pi/.bash_profile
+  template: src=bash_profile dest={{ user_home }}/.bash_profile
 
 - name: Enable cron
   service: name=cron enabled=true

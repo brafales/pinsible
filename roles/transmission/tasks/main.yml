@@ -38,10 +38,10 @@
   sudo: True
 
 - name: Copy transmission port update script
-  template: src=update_transmission_peer_port.py.j2 dest=/home/pi/bin/update_transmission_peer_port.py mode='u+rwx'
+  template: src=update_transmission_peer_port.py.j2 dest={{ user_home }}/bin/update_transmission_peer_port.py mode='u+rwx'
 
 - name: Add script to update port to crontab
-  cron: name="run update_transmission_peer_port" special_time=hourly job="/home/pi/bin/check_pia_open_port.sh | xargs /home/pi/bin/update_transmission_peer_port.py" state=present
+  cron: name="run update_transmission_peer_port" special_time=hourly job="{{ user_home }}/bin/check_pia_open_port.sh | xargs {{ user_home }}/bin/update_transmission_peer_port.py" state=present
 
 - name: Disable transmission-daemon on boot
   service: name=transmission-daemon enabled=false

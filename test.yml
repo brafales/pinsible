@@ -7,8 +7,6 @@
   roles:
     - common
     - nginx
-    - { role: rvm_io.rvm1-ruby, sudo: True }
     - pia
     - transmission
     - flexget
-    - kodi

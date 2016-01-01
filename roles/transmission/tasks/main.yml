@@ -29,13 +29,13 @@
   template: src=settings.json.j2 dest={{ configuration_path }} owner=debian-transmission group=debian-transmission mode='u=rw,g=rw'
   sudo: True
 
-- name: Copy transmission udev rules file
-  template: src=81-vpn-firewall.rules dest=/etc/udev/rules.d/81-vpn-firewall.rules owner=root mode='0644'
-  sudo: True
-
-- name: Copy transmission config reload script
-  template: src=change_transmission_bind_address.sh.j2 dest=/usr/local/bin/change_transmission_bind_address.sh owner=root mode='0655'
-  sudo: True
+#- name: Copy transmission udev rules file
+#  template: src=81-vpn-firewall.rules dest=/etc/udev/rules.d/81-vpn-firewall.rules owner=root mode='0644'
+#  sudo: True
+#
+#- name: Copy transmission config reload script
+#  template: src=change_transmission_bind_address.sh.j2 dest=/usr/local/bin/change_transmission_bind_address.sh owner=root mode='0655'
+#  sudo: True
 
 - name: Copy transmission port update script
   template: src=update_transmission_peer_port.py.j2 dest={{ user_home }}/bin/update_transmission_peer_port.py mode='u+rwx'
@@ -43,6 +43,6 @@
 - name: Add script to update port to crontab
   cron: name="run update_transmission_peer_port" special_time=hourly job="{{ user_home }}/bin/check_pia_open_port.sh | xargs {{ user_home }}/bin/update_transmission_peer_port.py" state=present
 
-- name: Disable transmission-daemon on boot
-  service: name=transmission-daemon enabled=false
-  sudo: True
+#- name: Disable transmission-daemon on boot
+#  service: name=transmission-daemon enabled=false
+#  sudo: True

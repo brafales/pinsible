@@ -1,4 +1,4 @@
 ---
 incomplete_folder: '/var/lib/transmission-daemon/downloads'
 configuration_path: '/var/lib/transmission-daemon/.config/transmission-daemon/settings.json'
-network_mask: '192.168.1.*'
+network_mask: '192.168.0.*'

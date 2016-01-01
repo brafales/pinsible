@@ -1,2 +1,2 @@
-gpu_mem=160
+gpu_mem_1024=256
 hdmi_drive=2

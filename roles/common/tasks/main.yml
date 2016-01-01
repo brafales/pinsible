@@ -21,3 +21,7 @@
 - name: Enable cron
   service: name=cron enabled=true
   sudo: True
+
+- name: Start cron
+  service: name=cron state=started
+  sudo: True

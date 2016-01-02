@@ -47,19 +47,31 @@
     - "{{ transmission_rpc_port }}"
   sudo: True
 
-- name: Allow local connections
+- name: Allow local ipv4 connections
   ufw: rule=allow src={{ item }}
   with_items:
-  - 10.0.0.0/8
-  - 172.16.0.0/12
-  - 192.168.0.0/16
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
   sudo: True
 
 - name: Allow ipv4 multicasts
   ufw: rule=allow src={{ item }} direction=out
   with_items:
-  - 224.0.0.0/24
-  - 239.0.0.0/8
+    - 224.0.0.0/24
+    - 239.0.0.0/8
+  sudo: True
+
+- name: Allow local ipv6 connections
+  ufw: rule=allow src=fe80::/64
+  sudo: True
+
+- name: Allow ipv6 multicasts
+  ufw: rule=allow src={{ item }} direction=out
+  with_items:
+    - ff01::/16
+    - ff02::/16
+    - ff05::/16
   sudo: True
 
 - name: Reload ufw

@@ -27,51 +27,54 @@
   ufw: direction=out port={{ vpn_port }} rule=allow
   sudo: True
 
-- name: Allow needed ports for incoming connections
+- name: Allow needed ports for incoming
+  ufw: port={{ item }} rule=allow direction=in
+  with_items: "{{ ports }}"
+  sudo: True
+
+- name: Allow needed ports for outgoing
   ufw: port={{ item }} rule=allow direction=out
-  with_items:
-    - 53
-    - 5353
-    - 80
-    - 443
-    - "{{ transmission_rpc_port }}"
+  with_items: "{{ ports }}"
   sudo: True
 
-- name: Allow needed ports for outgoing connections
-  ufw: port={{ item }} rule=allow direction=out
-  with_items:
-    - 53
-    - 5353
-    - 80
-    - 443
-    - "{{ transmission_rpc_port }}"
+- name: Allow local ipv4 incoming connections
+  ufw: rule=allow src={{ item }} direction=in
+  with_items: "{{ ipv4_addresses }}"
   sudo: True
 
-- name: Allow local ipv4 connections
-  ufw: rule=allow src={{ item }}
-  with_items:
-    - 10.0.0.0/8
-    - 172.16.0.0/12
-    - 192.168.0.0/16
-  sudo: True
-
-- name: Allow ipv4 multicasts
+- name: Allow local ipv4 outgoing connections
   ufw: rule=allow src={{ item }} direction=out
-  with_items:
-    - 224.0.0.0/24
-    - 239.0.0.0/8
+  with_items: "{{ ipv4_addresses }}"
   sudo: True
 
-- name: Allow local ipv6 connections
-  ufw: rule=allow src=fe80::/64
+- name: Allow ipv4 incoming multicasts
+  ufw: rule=allow src={{ item }} direction=in
+  with_items: "{{ ipv4_multicasts }}"
   sudo: True
 
-- name: Allow ipv6 multicasts
+- name: Allow ipv4 outgoing multicasts
   ufw: rule=allow src={{ item }} direction=out
-  with_items:
-    - ff01::/16
-    - ff02::/16
-    - ff05::/16
+  with_items: "{{ ipv4_multicasts }}"
+  sudo: True
+
+- name: Allow local ipv6 incoming connections
+  ufw: rule=allow src={{ item }} direction=in
+  with_items: "{{ ipv6_addresses }}"
+  sudo: True
+
+- name: Allow local ipv6 outgoing connections
+  ufw: rule=allow src={{ item }} direction=out
+  with_items: "{{ ipv6_addresses }}"
+  sudo: True
+
+- name: Allow ipv6 incoming multicasts
+  ufw: rule=allow src={{ item }} direction=in
+  with_items: "{{ ipv6_multicasts }}"
+  sudo: True
+
+- name: Allow ipv6 outgoing multicasts
+  ufw: rule=allow src={{ item }} direction=out
+  with_items: "{{ ipv6_multicasts }}"
   sudo: True
 
 - name: Reload ufw

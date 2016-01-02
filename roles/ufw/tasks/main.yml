@@ -55,6 +55,13 @@
   - 192.168.0.0/16
   sudo: True
 
+- name: Allow ipv4 multicasts
+  ufw: rule=allow src={{ item }} direction=out
+  with_items:
+  - 224.0.0.0/24
+  - 239.0.0.0/8
+  sudo: True
+
 - name: Reload ufw
   ufw: state=enabled
   sudo: True

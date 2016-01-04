@@ -1,6 +1,8 @@
 ---
 - name: Install openvpn
   apt: name={{ item }} state=present
+  environment:
+    PATH: /bin:/sbin:/usr/bin:/usr/sbin
   with_items:
     - openvpn
     - resolvconf

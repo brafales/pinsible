@@ -1,6 +1,8 @@
 ---
 - name: Install dependencies
   apt: name={{ item }} state=present
+  environment:
+    PATH: /bin:/sbin:/usr/bin:/usr/sbin
   with_items:
     - python
     - python-pip
@@ -32,4 +34,4 @@
     - animes.yml
 
 - name: Add flexget to the crontab
-  cron: name='run flexget' special_time=hourly job='/usr/local/bin/flexget --cron execute' state=present
+  cron: name='run flexget' minute='30' job='/usr/local/bin/flexget --cron execute' state=present

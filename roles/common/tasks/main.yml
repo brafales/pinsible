@@ -5,6 +5,8 @@
 
 - name: Install common packages
   apt: name={{ item }} state=present
+  environment:
+    PATH: /bin:/sbin:/usr/bin:/usr/sbin
   with_items:
     - vim
     - ntfs-3g
@@ -12,10 +14,10 @@
     - cron
   sudo: True
 
-- name: Create bin folder for pi user
+- name: Create bin folder for main user
   file: path={{ user_home }}/bin state=directory
 
-- name: Copy profile for pi user
+- name: Copy profile for main user
   template: src=bash_profile dest={{ user_home }}/.bash_profile
 
 - name: Enable cron

@@ -1,13 +1,15 @@
 ---
-user: pi
-user_home: /home/pi
+user: osmc
+user_home: /home/osmc
 rvm1_rubies:
   - 'ruby-2.2.3'
 rvm1_rvm_check_for_updates: False
 transmission_peer_port: '51413'
 transmission_initial_port: '49152'
 transmission_final_port: '65535'
-transmission_complete_folder: '/var/lib/transmission-daemon/complete'
+transmission_complete_folder: '/media/SAMSUNG/Media/Videos'
 series_folder: 'Series'
+anime_folder: 'Anime'
 vpn_port: '1194'
 transmission_rpc_port: '9091'
+min_ratio: 4

@@ -10,7 +10,7 @@ templates:
   tv:
     template: torrent
     metainfo_series: yes
-    quality: 720p h264
+    quality: 1080p h264
     exists_series:
       - "{{ transmission_complete_folder }}/{{ series_folder }}"
     include: series.yml
@@ -28,13 +28,13 @@ templates:
         - HorribleSubs
     template: torrent
     metainfo_series: yes
-    quality: 720p
+    quality: 1080p
     rss: http://www.nyaa.se/?page=rss&cats=1_37
     exists_series:
-      - "{{ transmission_complete_folder }}/{{ series_folder }}"
+      - "{{ transmission_complete_folder }}/{{ anime_folder }}"
     include: animes.yml
     set:
-      path: {{ transmission_complete_folder }}/{{ series_folder }}/{{ "{{ series_name }}" }}
+      path: {{ transmission_complete_folder }}/{{ anime_folder }}/{{ "{{ series_name }}" }}
       main_file_only: yes
       content_filename: "{{ "{{ series_name }}" }} - {{ "{{ series_id }}" }}"
     prowl:
@@ -43,6 +43,21 @@ templates:
 
 tasks:
   update_series:
+    priority: 10
+    template: tv
+    discover:
+      what:
+        - emit_series: yes
+      from:
+        - kat:
+            category: tv
+            verified: yes
+        - rarbg:
+            category: HDTV
+            sorted_by: seeders
+
+  update_series_specials:
+    priority: 20
     template: tv
     rss: https://kat.cr/tv/?rss=1
 
@@ -74,3 +89,6 @@ tasks:
       providers:
         - opensubtitles
         - podnapisi
+        - thesubdb
+        - addic7ed
+        - tvsubtitles

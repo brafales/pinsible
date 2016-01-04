@@ -1,9 +1,14 @@
 ---
 ports:
-  - 53
-  - 5353
-  - 80
-  - 443
+  - 53 #dns
+  - 5353 #mdns
+  - 80 #http
+  - 8282 #kodi
+  - 9090 #kodi
+  - 443 #https
+  - 139 #samba
+  - 554 #streaming
+  - 3689 #streaming
   - "{{ transmission_rpc_port }}"
 
 ipv4_addresses:

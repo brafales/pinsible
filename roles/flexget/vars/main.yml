@@ -1,4 +1,2 @@
 ---
 transmission_rpc_host: localhost
-transmission_rpc_port: 9091
-min_ratio: 2

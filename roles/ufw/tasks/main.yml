@@ -1,5 +1,7 @@
 - name: Install ufw
   apt: name=ufw state=present
+  environment:
+    PATH: /bin:/sbin:/usr/bin:/usr/sbin
   sudo: True
 
 - name: Reset to default config
@@ -28,12 +30,12 @@
   sudo: True
 
 - name: Allow needed ports for incoming
-  ufw: port={{ item }} rule=allow direction=in
+  ufw: port={{ item }} rule=allow direction=in proto=any
   with_items: "{{ ports }}"
   sudo: True
 
 - name: Allow needed ports for outgoing
-  ufw: port={{ item }} rule=allow direction=out
+  ufw: port={{ item }} rule=allow direction=out proto=any
   with_items: "{{ ports }}"
   sudo: True
 

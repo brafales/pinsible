@@ -1,6 +1,8 @@
 ---
 - name: Install transmission packages
   apt: name={{ item }} state=present
+  environment:
+    PATH: /bin:/sbin:/usr/bin:/usr/sbin
   with_items:
     - transmission-daemon
     - transmission-cli
@@ -15,14 +17,10 @@
   sudo: True
 
 - name: Create download folders
-  file: path={{ item }} owner=debian-transmission group=debian-transmission state=directory mode='u=rwx,g=rwx'
+  file: path={{ transmission_complete_folder }}/{{ item }} state=directory
   with_items:
-    - "{{ incomplete_folder }}"
-    - "{{ transmission_complete_folder }}"
-  sudo: True
-
-- name: Create series folders
-  file: path={{ transmission_complete_folder }}/{{ series_folder }} owner=debian-transmission group=debian-transmission state=directory mode='u=rwx,g=rwx'
+    - "{{ series_folder }}"
+    - "{{ anime_folder }}"
   sudo: True
 
 - name: Copy transmission configuration file

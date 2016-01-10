@@ -29,3 +29,9 @@
 
 - name: Copy pia open port script
   template: src=check_pia_open_port.sh.j2 dest={{ user_home }}/bin/check_pia_open_port.sh mode='u+rwx'
+
+- name: Copy internet watchdog script
+  template: src=internet_watchdog.sh dest={{ user_home }}/bin/internet_watchdog.sh mode='u+rwx'
+
+- name: Add internet watchdog to the crontab
+  cron: name='run internet watchdog' special_time='hourly' job='/usr/local/bin/internet_watchdog.sh' state=present

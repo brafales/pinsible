@@ -11,6 +11,8 @@ templates:
     template: torrent
     metainfo_series: yes
     quality: 1080p h264
+    emit_series:
+      backfill: yes
     exists_series:
       - "{{ transmission_complete_folder }}/{{ series_folder }}"
     include: series.yml
@@ -29,7 +31,8 @@ templates:
     template: torrent
     metainfo_series: yes
     quality: 1080p
-    rss: http://www.nyaa.se/?page=rss&cats=1_37
+    emit_series:
+      backfill: yes
     exists_series:
       - "{{ transmission_complete_folder }}/{{ anime_folder }}"
     include: animes.yml
@@ -56,13 +59,29 @@ tasks:
             category: HDTV
             sorted_by: seeders
 
+  update_animes:
+    priority: 10
+    template: anime
+    discover:
+      what:
+        - emit_series: yes
+      from:
+        - kat:
+            category: all
+            verified: yes
+        - nyaa:
+            category: anime eng
+            filter: trusted only
+
   update_series_specials:
     priority: 20
     template: tv
     rss: https://kat.cr/tv/?rss=1
 
-  update_animes:
+  update_animes_rss:
+    priority: 20
     template: anime
+    rss: http://www.nyaa.se/?page=rss&cats=1_37
 
   remove_old_torrents:
     clean_transmission:
@@ -73,22 +92,3 @@ tasks:
       username: {{ transmission_rpc_username }}
       password: {{ transmission_rpc_password }}
 
-  download_subtitles:
-    interval: 5 hours
-    filesystem:
-      path:
-        - "{{ transmission_complete_folder }}/{{ series_folder }}"
-      regexp: '.*\.(avi|mkv|mp4)$'
-      recursive: yes
-    accept_all: yes
-    disable: seen
-    subliminal:
-      languages:
-        - en
-      exact_match: yes
-      providers:
-        - opensubtitles
-        - podnapisi
-        - thesubdb
-        - addic7ed
-        - tvsubtitles

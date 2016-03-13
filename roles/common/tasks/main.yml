@@ -12,6 +12,8 @@
     - ntfs-3g
     - curl
     - cron
+    - git
+    - htop
   sudo: True
 
 - name: Create bin folder for main user

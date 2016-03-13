@@ -1,4 +1,4 @@
-SR_USER={{ remote_user }}
+SR_USER={{ user }}
 SR_HOME={{ user_home }}/SickRage
 SR_DATA={{ user_home }}/SickRage
 SR_PIDFILE={{ user_home }}/SickRage/.sickrage.pid

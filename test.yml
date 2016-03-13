@@ -5,7 +5,7 @@
     - vars/credentials.yml
   remote_user: osmc
   roles:
-          #- common
+      #- common
       #- nginx
       #- pia
       #- ufw

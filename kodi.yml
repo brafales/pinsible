@@ -1,8 +1,0 @@
----
-- hosts: all
-  vars_files:
-    - vars/common.yml
-    - vars/credentials.yml
-  remote_user: pi
-  roles:
-    - kodi

@@ -9,7 +9,7 @@
   sudo: True
 
 - name: Install sickrage pip dependencies
-  pip: name={{ item.name }}
+  pip: name={{ item }}
   with_items:
     - subliminal
   sudo: True
@@ -18,14 +18,21 @@
   git: repo=https://github.com/SickRage/SickRage.git dest={{ user_home }}/SickRage
 
 - name: Copy sickrage init script
-  command: cp {{ {{ user_home }}/SickRage }}/runscripts/init.ubuntu /etc/init.d/sickrage
+  command: "cp {{ user_home }}/SickRage/runscripts/init.ubuntu /etc/init.d/sickrage"
   sudo: True
 
 - name: Make init script executable
   file: path=/etc/init.d/sickrage mode=0755
+  sudo: True
+
+- name: Copy defaults file
+  template: src=sickrage dest=/etc/default/sickrage owner=root mode='0644'
+  sudo: True
 
 - name: Enable sickrage service
   service: name=sickrage enabled=yes
+  sudo: True
 
 - name: Start sickrage service
   service: name=sickrage state=started
+  sudo: True

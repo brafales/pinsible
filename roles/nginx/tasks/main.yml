@@ -1,4 +1,6 @@
 ---
 - name: Install nginx
   apt: name=nginx state=present
+  environment:
+    PATH: /bin:/sbin:/usr/bin:/usr/sbin
   sudo: True

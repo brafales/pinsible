@@ -3,7 +3,7 @@
   vars_files:
     - vars/common.yml
     - vars/credentials.yml
-  remote_user: pi
+  remote_user: osmc
   roles:
     - common
     - nginx

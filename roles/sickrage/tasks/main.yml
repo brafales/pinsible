@@ -1,0 +1,31 @@
+---
+- name: Install dependencies
+  apt: name={{ item }} state=present
+  environment:
+    PATH: /bin:/sbin:/usr/bin:/usr/sbin
+  with_items:
+    - python
+    - python-pip
+  sudo: True
+
+- name: Install sickrage pip dependencies
+  pip: name={{ item.name }}
+  with_items:
+    - subliminal
+  sudo: True
+
+- name: Download sickrage
+  git: repo=https://github.com/SickRage/SickRage.git dest={{ user_home }}/SickRage
+
+- name: Copy sickrage init script
+  command: cp {{ {{ user_home }}/SickRage }}/runscripts/init.ubuntu /etc/init.d/sickrage
+  sudo: True
+
+- name: Make init script executable
+  file: path=/etc/init.d/sickrage mode=0755
+
+- name: Enable sickrage service
+  service: name=sickrage enabled=yes
+
+- name: Start sickrage service
+  service: name=sickrage state=started

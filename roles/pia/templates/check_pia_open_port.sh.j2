@@ -8,4 +8,4 @@ PASSWORD='{{ pia_password }}'
 VPN_IP=`/sbin/ifconfig tun0  | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
 PIA_URL='https://www.privateinternetaccess.com/vpninfo/port_forward_assignment'
 
-echo `curl -s -d "user=$USERNAME&pass=$PASSWORD&client_id=$CLIENT_ID&local_ip=$VPN_IP" $PIA_URL | sed 's/[^0-9]*//g'`
+echo `curl -k -s -d "user=$USERNAME&pass=$PASSWORD&client_id=$CLIENT_ID&local_ip=$VPN_IP" $PIA_URL | sed 's/[^0-9]*//g'`

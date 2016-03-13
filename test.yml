@@ -9,5 +9,4 @@
       #- nginx
       #- pia
       #- ufw
-      #- transmission
-    - flexget
+      - transmission
